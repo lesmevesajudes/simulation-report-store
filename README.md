@@ -31,3 +31,13 @@ yarn start
 
 - `api/queries.js`: functions and exports.
 - `api/index.js`: endpoints.
+
+## Configuration
+This app is configured using the following environment variables:
+- `AUTH_TOKEN`: A token used to query simulation reports.         
+- `DATABASE_CONNECTION_STRING`: Where to find postgres database.
+- `NODE_ENV`: To force node environment.  (`development` by default)
+- `HOST`: Listen address (`0.0.0.0` by default)
+- `PORT`: Listen port (`3000` by default)
+
+Names can be tuned in `src/config.js`.     

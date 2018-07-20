@@ -1,0 +1,14 @@
+{
+  "name": "simulation-store",
+  "version": "1.0.0",
+  "main": "server.js",
+  "license" : "MIT" ,
+  "dependencies": {
+    "bluebird": "~3.5.1",
+    "body-parser": "~1.18.3",
+    "debug": "~3.1.0",
+    "express": "~4.16.3",
+    "morgan": "~1.9.0",
+    "pg-promise": "~8.4.5"
+  }
+}

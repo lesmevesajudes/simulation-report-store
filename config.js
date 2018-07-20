@@ -1,6 +1,6 @@
 module.exports = {
   AUTH_TOKEN: process.env.AUTH_TOKEN,
-  DATABASE_CONNECTION_STRING: process.env.DATABASE_CONNECTION_STRING,
+  DATABASE_CONNECTION_STRING: process.env.DATABASE_URL,
   ENVIRONMENT: process.env.NODE_ENV || 'development',
   LISTEN_HOST: process.env.HOST || '0.0.0.0',
   LISTEN_PORT: process.env.PORT || 3000

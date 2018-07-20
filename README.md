@@ -15,11 +15,7 @@ yarn install
 psql -f data/reset_simulation_store.sql
 ```
 
-You can configure your database connection in the `api/queries.js` file. The line:
-
-```
-var connectionString = 'postgres://localhost:5432/simulations';
-```
+You can configure your database connection setting `DATABASE_URL` environment variable.
 
 ## Usage
 
@@ -34,8 +30,8 @@ yarn start
 
 ## Configuration
 This app is configured using the following environment variables:
-- `AUTH_TOKEN`: A token used to query simulation reports.         
-- `DATABASE_CONNECTION_STRING`: Where to find postgres database.
+- `AUTH_TOKEN`: A token used to query simulation reports. (mandatory to query data)
+- `DATABASE_URL`: Where to find postgres database. (mandatory)
 - `NODE_ENV`: To force node environment.  (`development` by default)
 - `HOST`: Listen address (`0.0.0.0` by default)
 - `PORT`: Listen port (`3000` by default)

@@ -29,7 +29,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 // This allows client applications from other domains use the API Server
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Expose-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Total-Count, Content-Range, authentication-token, Access-Control-Allow-Headers");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Total-Count, Content-Range, authentication-token, Access-Control-Allow-Headers");
   next();
 });
 

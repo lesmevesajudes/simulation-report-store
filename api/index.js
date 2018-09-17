@@ -10,9 +10,11 @@ router.get('/', function (req, res, next) {
 });
 
 var db = require('./queries');
+var auth = require('./authentication');
 
-router.get('/api/simulations/', db.getAllSimulations);
 router.get('/api/simulations/:id', db.getSimulation);
+router.get('/api/simulations/', db.getAllSimulations);
 router.post('/api/simulations', db.createSimulation);
+router.post('/api/authenticate', auth.login);
 
 module.exports = router;

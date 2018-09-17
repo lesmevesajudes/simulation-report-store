@@ -18,22 +18,34 @@ function authenticate(req, token) {
 function Unauthorized() {
   var err = new Error('Unauthorized');
   err.status = 401;
+  return err;
+}
+
+function BadRequest() {
+  var err = new Error('Bad Request');
+  err.status = 400;
+  return err;
 }
 
 function getAllSimulations(req, res, next) {
   if (authenticate(req, config.AUTH_TOKEN)) {
-    db.any('SELECT * FROM simulations')
-        .then(function (data) {
-          res.status(200)
-              .json({
-                status: 'success',
-                data: data,
-                message: 'Retrieved all simulations'
-              });
-        })
-        .catch(function (err) {
-          return next(err);
-        });
+    var range = req.query.range;
+    var regexp = /\[(\d+), *(\d+)\]/g;
+    var result = regexp.exec(range);
+    if ( result === null ) return next(BadRequest());
+    var from = result[1];
+    var to = result[2];
+    db.one('SELECT COUNT(*) FROM simulations').then(function (countResult) {
+      db.any('SELECT * FROM simulations LIMIT ' + (to - from) + ' OFFSET ' + from)
+          .then(function (data) {
+            res.set('Content-Range', 'simulations '+from + '-' + to + '/' + countResult.count);
+            res.status(200)
+                .json(data);
+          })
+          .catch(function (err) {
+            return next(err);
+          });
+    });
   } else {
     return next(Unauthorized());
   }
@@ -42,14 +54,10 @@ function getAllSimulations(req, res, next) {
 
 function getSimulation(req, res, next) {
   if (authenticate(req, config.AUTH_TOKEN)) {
-    db.one('SELECT * FROM simulations WHERE id = $1', id)
+    db.one('SELECT * FROM simulations WHERE id = $1', req.params.id)
         .then(function (data) {
           res.status(200)
-              .json({
-                status: 'success',
-                data: data,
-                message: 'Retrieved one simulation'
-              });
+              .json(data);
         })
         .catch(function (err) {
           return next(err);

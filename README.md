@@ -1,7 +1,10 @@
-node-postgres-restapi
+simulation-store
 =====================
 
-A bootstrap to create RESTful APIs with [Node.js](https://nodejs.org/), [Express](http://expressjs.com/) and [Postgres](https://www.postgresql.org/).
+An api to store and retrieve simulations made with lesmevesajudes-ui.
+Created from a bootstrap to create RESTful APIs with [Node.js](https://nodejs.org/), [Express](http://expressjs.com/) and [Postgres](https://www.postgresql.org/).
+
+NOTE: Now only supports one user. See env variables.
 
 ## Installation
 
@@ -25,12 +28,14 @@ yarn start
 
 ## Setting up your queries
 
-- `api/queries.js`: functions and exports.
-- `api/index.js`: endpoints.
+- `api/simulationRequests.js`: functions and exports.
+- `api/routes.js`: endpoints.
 
 ## Configuration
 This app is configured using the following environment variables:
 - `AUTH_TOKEN`: A token used to query simulation reports. (mandatory to query data)
+- `AUTH_USER`: Client user
+- `AUTH_PASSWORD`: Client password
 - `DATABASE_URL`: Where to find postgres database. (mandatory)
 - `NODE_ENV`: To force node environment.  (`development` by default)
 - `HOST`: Listen address (`0.0.0.0` by default)

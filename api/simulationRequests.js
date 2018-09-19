@@ -1,5 +1,6 @@
 var promise = require('bluebird');
 var config = require('../config.js');
+var responses = require('./responses');
 
 var options = {
   // Initialization Options
@@ -15,24 +16,12 @@ function authenticate(req, token) {
   return clientToken === token;
 }
 
-function Unauthorized() {
-  var err = new Error('Unauthorized');
-  err.status = 401;
-  return err;
-}
-
-function BadRequest() {
-  var err = new Error('Bad Request');
-  err.status = 400;
-  return err;
-}
-
 function getAllSimulations(req, res, next) {
   if (authenticate(req, config.AUTH_TOKEN)) {
     var range = req.query.range;
     var regexp = /\[(\d+), *(\d+)\]/g;
     var result = regexp.exec(range);
-    if ( result === null ) return next(BadRequest());
+    if ( result === null ) return next(responses.badRequest());
     var from = result[1];
     var to = result[2];
     db.one('SELECT COUNT(*) FROM simulations').then(function (countResult) {
@@ -47,7 +36,7 @@ function getAllSimulations(req, res, next) {
           });
     });
   } else {
-    return next(Unauthorized());
+    return next(responses.unauthorized());
   }
 
 }
@@ -63,7 +52,7 @@ function getSimulation(req, res, next) {
           return next(err);
         });
   } else {
-    return next(Unauthorized());
+    return next(responses.unauthorized());
   }
 }
 

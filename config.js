@@ -1,5 +1,7 @@
 module.exports = {
   AUTH_TOKEN: process.env.AUTH_TOKEN,
+  AUTH_USER: process.env.AUTH_USER,
+  AUTH_PASSWORD: process.env.AUTH_PASSWORD,
   DATABASE_CONNECTION_STRING: process.env.DATABASE_URL,
   ENVIRONMENT: process.env.NODE_ENV || 'development',
   LISTEN_HOST: process.env.HOST || '0.0.0.0',

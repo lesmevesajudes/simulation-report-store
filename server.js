@@ -3,7 +3,7 @@ var config = require('./config.js');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
-var api = require('./api/index');
+var api = require('./api/routes');
 
 var app = express();
 

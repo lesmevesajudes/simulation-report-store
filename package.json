@@ -7,7 +7,7 @@
     "start": "yarn build && node dist/index.js",
     "start:dev": "nodemon --exec babel-node $npm_package_main",
     "clean": "rimraf dist",
-    "build": "yarn clean && mkdir -p dist && babel src -s -D -d dist",
+    "build": "yarn clean && mkdir -p dist && node_modules/.bin/babel src -s -D -d dist",
     "test": "jest --watch",
     "lint": "esw -w src test"
   },

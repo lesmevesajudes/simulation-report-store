@@ -12,7 +12,7 @@ const validBody = {
   'expected_result': 'Should give benefit 33',
   'accepted_result': false,
   'comments': 'As income is lower than XXX benefit 33 should be given',
-  'tester_email': 'john@doe.com',
+  'reporter_email': 'john@doe.com',
   'test_group': 'council'
 };
 const {simulation_id, ...invalidBody} = validBody;

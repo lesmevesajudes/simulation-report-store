@@ -57,10 +57,10 @@ export function getSimulationReport(req, res, next) {
 }
 
 export function createSimulationReport(req, res, next) {
-  if (!hasAll(req.body, ['application_state', 'simulation_id', 'expected_result', 'accepted_result', 'comments', 'tester_email', 'test_group'])) {
+  if (!hasAll(req.body, ['application_state', 'simulation_id', 'expected_result', 'accepted_result', 'comments', 'reporter_email', 'test_group'])) {
     return next(Responses.badRequest());
   }
-  db.none('INSERT INTO simulation_reports (application_state, simulation_id, expected_result, accepted_result, comments, tester_email, test_group) VALUES (${application_state}, ${simulation_id},${expected_result}, ${accepted_result}, ${comments}, ${tester_email}, ${test_group})',
+  db.none('INSERT INTO simulation_reports (application_state, simulation_id, expected_result, accepted_result, comments, reporter_email, test_group) VALUES (${application_state}, ${simulation_id},${expected_result}, ${accepted_result}, ${comments}, ${reporter_email}, ${test_group})',
       req.body)
       .then(function () {
         res.status(200)

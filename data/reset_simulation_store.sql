@@ -12,7 +12,7 @@ CREATE TABLE simulation_reports
   expected_result   text,
   accepted_result   boolean,
   comments          text,
-  tester_email      varchar(50),
+  reporter_email    varchar(50),
   test_group        varchar(70),
   created_at        timestamp DEFAULT CURRENT_TIMESTAMP
 );

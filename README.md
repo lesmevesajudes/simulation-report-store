@@ -28,8 +28,8 @@ yarn start
 
 ## Setting up your queries
 
-- `api/simulationReportsRequests.js`: functions and exports.
-- `api/routes.js`: endpoints.
+- `**/**Requests.js`: functions and exports.
+- `**/routes.js`: endpoints.
 
 ## Configuration
 This app is configured using the following environment variables:

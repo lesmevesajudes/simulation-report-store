@@ -1,5 +1,5 @@
-import {getSimulationReport, getAllSimulationReports, createSimulationReport} from "./simulationReportsRequests";
-import {Router} from "express";
+import {getSimulationReport, getAllSimulationReports, createSimulationReport} from './simulationReportsRequests';
+import {Router} from 'express';
 
 const router = Router();
 

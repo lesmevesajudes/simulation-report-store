@@ -1,7 +1,7 @@
 import promise from 'bluebird';
 import config from '../config.js';
 import Responses from '../shared/responses';
-import {hasAll} from "../shared/common";
+import {hasAll} from '../shared/common';
 
 const options = {
   // Initialization Options

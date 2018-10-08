@@ -1,13 +1,13 @@
 import request from 'supertest';
-import app from "../src/server";
+import app from '../src/server';
 
-const HTTP_OK=200;
-const HTTP_BAD_REQUEST=400;
-const HTTP_UNAUTHORIZED=401;
-const HTTP_NOT_FOUND=404;
+const HTTP_OK = 200;
+const HTTP_BAD_REQUEST = 400;
+const HTTP_UNAUTHORIZED = 401;
+const HTTP_NOT_FOUND = 404;
 
 const validBody = {
-  'application_state': '{"state": 1}',
+  'application_state': {state: 1},
   'simulation_id': 'c9ae621e-4b98-4bc9-98c9-098c84ee189e',
   'expected_result': 'Should give benefit 33',
   'accepted_result': false,
@@ -75,9 +75,7 @@ describe('GET /api/simulation_reports', () => {
   });
   it('should include query parameters', async () => {
     const response = await request(app).get('/api/simulation_reports')
-        .query(
-            {
-            })
+        .query({})
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .set('Authentication-Token', validToken);

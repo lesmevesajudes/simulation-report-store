@@ -1,4 +1,4 @@
-import {hasAll} from "../src/shared/common";
+import {hasAll} from '../src/shared/common';
 
 const anObject = {foo: 'bar', fizz: 'bazz'};
 

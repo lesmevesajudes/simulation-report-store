@@ -1,5 +1,5 @@
-import {login} from "./authenticationRequests";
-import {Router} from "express";
+import {login} from './authenticationRequests';
+import {Router} from 'express';
 
 const router = Router();
 export default router.post('/authentication', login);

@@ -2,7 +2,7 @@ import express, {Router} from 'express';
 import logger  from 'morgan';
 import bodyParser from 'body-parser';
 import authenticationRoutes from './authentication/routes';
-import simulationReportsRoutes from "./simulationReports/routes";
+import simulationReportsRoutes from './simulationReports/routes';
 
 const app = express();
 
@@ -11,7 +11,7 @@ const app = express();
 // Server Middleware
 ///////////////////////
 
-app.use(logger(app.get("env") === "production" ? "combined" : "dev"));
+app.use(logger(app.get('env') === 'production' ? 'combined' : 'dev'));
 
 // parse application/json
 app.use(bodyParser.json());
@@ -27,9 +27,9 @@ app.use(bodyParser.urlencoded({extended: false}));
 // CORS
 // This allows client applications from other domains use the API Server
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Expose-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Total-Count, Content-Range, authentication-token, Access-Control-Allow-Headers");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, X-Total-Count, Content-Range, authentication-token, Access-Control-Allow-Headers");
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Expose-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Total-Count, Content-Range, authentication-token, Access-Control-Allow-Headers');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-Total-Count, Content-Range, authentication-token, Access-Control-Allow-Headers');
   next();
 });
 
@@ -91,9 +91,9 @@ app.use(function (err, req, res, next) {
 });
 
 app.run = (host, port, env) => {
-  app.set("env", env );
-  app.set("host", host);
-  app.set("port", port);
+  app.set('env', env );
+  app.set('host', host);
+  app.set('port', port);
 
   app.listen(port, function () {
     console.info(`⭐️ REST API listening on ${host}:${port.toString()} environment: ${env}`);

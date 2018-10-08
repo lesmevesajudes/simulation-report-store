@@ -26,7 +26,7 @@ export function getAllSimulationReports(req, res, next) {
     if (result === null) return next(Responses.badRequest());
     const [, from, to] = result;
     db.one('SELECT COUNT(*) FROM simulation_reports').then(function (countResult) {
-      db.any('SELECT * FROM simulation_reports LIMIT $1 OFFSET $2', [to - from, from])
+      db.any('SELECT * FROM simulation_reports ORDER BY id LIMIT $1 OFFSET $2', [to - from, from])
           .then(function (data) {
             res.set('Content-Range', 'simulations ' + from + '-' + to + '/' + countResult.count);
             res.status(200)

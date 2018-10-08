@@ -1,12 +1,12 @@
 {
   "name": "simulation-store",
   "version": "1.0.0",
-  "main": "src/server.js",
+  "main": "src/index.js",
   "license": "MIT",
   "scripts": {
     "prestart": "npm run -s build",
     "start": "node dist/index.js",
-    "start:dev": "nodemon src/index.js --exec babel-node",
+    "start:dev": "nodemon --exec babel-node $npm_package_main",
     "clean": "rimraf dist",
     "build": "yarn clean && mkdir -p dist && babel src -s -D -d dist",
     "test": "jest --watch",
@@ -63,5 +63,11 @@
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [
+      "*.test.js"
+    ]
   }
 }

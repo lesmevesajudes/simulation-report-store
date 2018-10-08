@@ -1,11 +1,9 @@
-var express = require('express');
-var config = require('./config.js');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+import express from 'express';
+import logger  from 'morgan';
+import bodyParser from 'body-parser';
+import api from './api/routes';
 
-var api = require('./api/routes');
-
-var app = express();
+const app = express();
 
 
 ///////////////////////
@@ -46,16 +44,6 @@ app.use('/', api);
 // Server Setup
 //////////////////
 
-app.set("env", config.ENVIRONMENT);
-app.set("host", config.LISTEN_HOST);
-app.set("port", config.LISTEN_PORT);
-
-app.listen(app.get("port"), function () {
-  console.log('\n' + '**********************************');
-  console.log('REST API listening on port ' + app.get("port").toString() + ' environment: ' + app.get('env'));
-  console.log('**********************************' + '\n');
-});
-
 
 ////////////////////
 // Error Handlers
@@ -63,7 +51,7 @@ app.listen(app.get("port"), function () {
 
 /// catch 404 and forwarding to error handler
 app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -92,5 +80,14 @@ app.use(function (err, req, res, next) {
 
 });
 
+app.run = (host, port, env) => {
+  app.set("env", env );
+  app.set("host", host);
+  app.set("port", port);
 
-module.exports = app;
+  app.listen(port, function () {
+    console.info(`⭐️ REST API listening on ${host}:${port.toString()} environment: ${env}`);
+  });
+};
+
+export default app;

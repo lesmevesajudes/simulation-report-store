@@ -28,7 +28,7 @@ yarn start
 
 ## Setting up your queries
 
-- `api/simulationRequests.js`: functions and exports.
+- `api/simulationReportsRequests.js`: functions and exports.
 - `api/routes.js`: endpoints.
 
 ## Configuration

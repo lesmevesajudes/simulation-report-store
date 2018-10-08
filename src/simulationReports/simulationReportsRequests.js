@@ -1,7 +1,7 @@
 import promise from 'bluebird';
 import config from '../config.js';
-import {badRequest, unauthorized} from '../api/responses';
-import {hasAll} from "../common";
+import Responses from '../shared/responses';
+import {hasAll} from "../shared/common";
 
 const options = {
   // Initialization Options
@@ -23,7 +23,7 @@ export function getAllSimulationReports(req, res, next) {
     const range = req.query.range;
     const regexp = /\[(\d+), *(\d+)\]/g;
     const result = regexp.exec(range);
-    if (result === null) return next(badRequest());
+    if (result === null) return next(Responses.badRequest());
     const [, from, to] = result;
     db.one('SELECT COUNT(*) FROM simulation_reports').then(function (countResult) {
       db.any('SELECT * FROM simulation_reports LIMIT $1 OFFSET $2', [to - from, from])
@@ -37,7 +37,7 @@ export function getAllSimulationReports(req, res, next) {
           });
     });
   } else {
-    return next(unauthorized());
+    return next(Responses.unauthorized());
   }
 }
 
@@ -52,13 +52,13 @@ export function getSimulationReport(req, res, next) {
           return next(err);
         });
   } else {
-    return next(unauthorized());
+    return next(Responses.unauthorized());
   }
 }
 
 export function createSimulationReport(req, res, next) {
   if (!hasAll(req.body, ['application_state', 'simulation_id', 'expected_result', 'accepted_result', 'comments', 'tester_email', 'test_group'])) {
-    return next(badRequest());
+    return next(Responses.badRequest());
   }
   db.none('INSERT INTO simulation_reports (application_state, simulation_id, expected_result, accepted_result, comments, tester_email, test_group) VALUES (${application_state}, ${simulation_id},${expected_result}, ${accepted_result}, ${comments}, ${tester_email}, ${test_group})',
       req.body)

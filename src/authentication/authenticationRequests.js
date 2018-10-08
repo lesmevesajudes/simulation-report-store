@@ -1,6 +1,6 @@
 import config from '../config.js';
 import {authenticate}  from './authService';
-import {unauthorized} from '../api/responses';
+import Responses from '../shared/responses';
 
 export function login(req, res, next) {
   // TODO Add proper auth store
@@ -9,7 +9,7 @@ export function login(req, res, next) {
       token: config.AUTH_TOKEN
     });
   } else {
-    return next(unauthorized());
+    return next(Responses.unauthorized());
   }
 }
 

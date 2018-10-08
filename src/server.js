@@ -1,7 +1,8 @@
-import express from 'express';
+import express, {Router} from 'express';
 import logger  from 'morgan';
 import bodyParser from 'body-parser';
-import api from './api/routes';
+import authenticationRoutes from './authentication/routes';
+import simulationReportsRoutes from "./simulationReports/routes";
 
 const app = express();
 
@@ -36,8 +37,17 @@ app.use(function (req, res, next) {
 //////////////////
 // API Queries
 //////////////////
-
-app.use('/', api);
+const rootRouter = Router();
+rootRouter.get('/', function (req, res, next) {
+  res.status(200)
+      .json({
+        status: 'success',
+        message: 'Live long and prosper!'
+      });
+});
+app.use ('/', rootRouter);
+app.use('/api/simulation_reports', simulationReportsRoutes);
+app.use('/api/authentication', authenticationRoutes);
 
 
 //////////////////

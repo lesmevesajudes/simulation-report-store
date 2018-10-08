@@ -1,6 +1,6 @@
 import promise from 'bluebird';
 import config from '../config.js';
-import {badRequest, unauthorized} from './responses';
+import {badRequest, unauthorized} from '../api/responses';
 import {hasAll} from "../common";
 
 const options = {
@@ -39,7 +39,6 @@ export function getAllSimulationReports(req, res, next) {
   } else {
     return next(unauthorized());
   }
-
 }
 
 export function getSimulationReport(req, res, next) {

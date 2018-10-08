@@ -1,6 +1,6 @@
 import config from '../config.js';
-import {authenticate}  from './services/authService';
-import {unauthorized} from './responses';
+import {authenticate}  from './authService';
+import {unauthorized} from '../api/responses';
 
 export function login(req, res, next) {
   // TODO Add proper auth store
@@ -12,3 +12,5 @@ export function login(req, res, next) {
     return next(unauthorized());
   }
 }
+
+

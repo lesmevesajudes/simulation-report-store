@@ -46,8 +46,8 @@ rootRouter.get('/', function (req, res, next) {
       });
 });
 app.use ('/', rootRouter);
-app.use('/api/simulation_reports', simulationReportsRoutes);
-app.use('/api/authentication', authenticationRoutes);
+app.use('/api/', simulationReportsRoutes);
+app.use('/api/', authenticationRoutes);
 
 
 //////////////////

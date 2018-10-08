@@ -4,7 +4,6 @@
   "main": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "prestart": "npm run -s build",
     "start": "node dist/index.js",
     "start:dev": "nodemon --exec babel-node $npm_package_main",
     "clean": "rimraf dist",

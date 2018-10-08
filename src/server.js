@@ -5,13 +5,13 @@ import authenticationRoutes from './authentication/routes';
 import simulationReportsRoutes from './simulationReports/routes';
 
 const app = express();
-
+const isProduction  = app.get('env') === 'production';
 
 ///////////////////////
 // Server Middleware
 ///////////////////////
 
-app.use(logger(app.get('env') === 'production' ? 'combined' : 'dev'));
+app.use(logger(isProduction ? 'combined' : 'dev'));
 
 // parse application/json
 app.use(bodyParser.json());
@@ -68,8 +68,9 @@ app.use(function (req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (!isProduction) {
   app.use(function (err, req, res, next) {
+    err.status || console.error(err);
     res.status(err.status || 500);
     res.json({
       message: err.message,

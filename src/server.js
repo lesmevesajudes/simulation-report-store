@@ -3,6 +3,7 @@ import logger  from 'morgan';
 import bodyParser from 'body-parser';
 import authenticationRoutes from './authentication/routes';
 import simulationReportsRoutes from './simulationReports/routes';
+import simulationsRoutes from './simulations/routes';
 
 const app = express();
 const isProduction  = app.get('env') === 'production';
@@ -46,8 +47,9 @@ rootRouter.get('/', function (req, res, next) {
       });
 });
 app.use ('/', rootRouter);
-app.use('/api/', simulationReportsRoutes);
-app.use('/api/', authenticationRoutes);
+app.use('/api/simulation_reports', simulationReportsRoutes);
+app.use('/api/simulations', simulationsRoutes);
+app.use('/api/authenticate', authenticationRoutes);
 
 
 //////////////////

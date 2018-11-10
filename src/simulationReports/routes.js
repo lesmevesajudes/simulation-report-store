@@ -4,8 +4,8 @@ import {Router} from 'express';
 const router = Router();
 
 
-router.get('/simulation_reports/:id', getSimulationReport);
-router.get('/simulation_reports/', getAllSimulationReports);
-router.post('/simulation_reports/', createSimulationReport);
+router.get('/:id', getSimulationReport);
+router.get('/', getAllSimulationReports);
+router.post('/', createSimulationReport);
 
 export default router;

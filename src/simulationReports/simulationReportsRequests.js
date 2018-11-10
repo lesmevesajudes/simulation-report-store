@@ -1,25 +1,13 @@
-import promise from 'bluebird';
-import config from '../config.js';
+import {isValidToken} from '../authentication/authService';
+import config from '../config';
+import database from '../database';
 import Responses from '../shared/responses';
-import {hasAll} from '../shared/common';
+import {getTokenFromRequest, hasAll} from '../shared/common';
 
-const options = {
-  // Initialization Options
-  promiseLib: promise
-};
-
-const pgp = require('pg-promise')(options);
-const connectionString = config.DATABASE_CONNECTION_STRING;
-const db = pgp(connectionString);
-
-
-function authenticate(req, token) {
-  const clientToken = req.get('Authentication-Token');
-  return clientToken === token;
-}
+const db = database(config.DATABASE_CONNECTION_STRING);
 
 export function getAllSimulationReports(req, res, next) {
-  if (authenticate(req, config.AUTH_TOKEN)) {
+  if (isValidToken(getTokenFromRequest(req))) {
     const range = req.query.range;
     const regexp = /\[(\d+), *(\d+)\]/g;
     const result = regexp.exec(range);
@@ -28,7 +16,7 @@ export function getAllSimulationReports(req, res, next) {
     db.one('SELECT COUNT(*) FROM simulation_reports').then(function (countResult) {
       db.any('SELECT * FROM simulation_reports ORDER BY id LIMIT $1 OFFSET $2', [to - from, from])
           .then(function (data) {
-            res.set('Content-Range', 'simulations ' + from + '-' + to + '/' + countResult.count);
+            res.set('Content-Range', 'simulation_reports ' + from + '-' + to + '/' + countResult.count);
             res.status(200)
                 .json(data);
           })
@@ -42,7 +30,7 @@ export function getAllSimulationReports(req, res, next) {
 }
 
 export function getSimulationReport(req, res, next) {
-  if (authenticate(req, config.AUTH_TOKEN)) {
+  if (isValidToken(getTokenFromRequest(req))) {
     db.one('SELECT * FROM simulation_reports WHERE id = $1', req.params.id)
         .then(function (data) {
           res.status(200)

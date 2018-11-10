@@ -6,7 +6,16 @@ const HTTP_BAD_REQUEST = 400;
 const HTTP_UNAUTHORIZED = 401;
 const HTTP_NOT_FOUND = 404;
 
-const validBody = {
+function fake_uuid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+}
+
+const simulationReportValidBody = {
   'application_state': {state: 1},
   'simulation_id': 'c9ae621e-4b98-4bc9-98c9-098c84ee189e',
   'expected_result': 'Should give benefit 33',
@@ -15,7 +24,12 @@ const validBody = {
   'reporter_email': 'john@doe.com',
   'test_group': 'council'
 };
-const {simulation_id, ...invalidBody} = validBody;
+const simulationValidBody = ()=> ({
+  'simulation': {state: 1},
+  'id': fake_uuid(),
+});
+const {simulation_id:is_ignored, ...simulationReportInvalidBody} = simulationReportValidBody;
+const {id:also_ignored, ...simulationInvalidBody} = simulationValidBody();
 const validToken = '121331313113';
 const invalidToken = 'invalid-token';
 
@@ -30,7 +44,7 @@ describe('GET /', () => {
 
 describe('POST /api/simulation_reports', () => {
   it('should save a simulation report', async () => {
-    const response = await request(app).post('/api/simulation_reports').send(validBody)
+    const response = await request(app).post('/api/simulation_reports').send(simulationReportValidBody)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .set('Authentication-Token', validToken);
@@ -38,7 +52,7 @@ describe('POST /api/simulation_reports', () => {
   });
 
   it('should not save incomplete simulation reports', async () => {
-    const response = await request(app).post('/api/simulation_reports').send(invalidBody)
+    const response = await request(app).post('/api/simulation_reports').send(simulationReportInvalidBody)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .set('Authentication-Token', validToken);
@@ -75,6 +89,61 @@ describe('GET /api/simulation_reports', () => {
   });
   it('should include query parameters', async () => {
     const response = await request(app).get('/api/simulation_reports')
+        .query({})
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Authentication-Token', validToken);
+    expect(response.statusCode).toBe(HTTP_BAD_REQUEST);
+  });
+});
+
+describe('POST /api/simulations', () => {
+  it('should save a simulation', async () => {
+    const response = await request(app).post('/api/simulations').send(simulationValidBody())
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Authentication-Token', validToken);
+    expect(response.statusCode).toBe(HTTP_OK);
+  });
+
+  it('should not save incomplete simulations', async () => {
+    const response = await request(app).post('/api/simulations').send(simulationInvalidBody)
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Authentication-Token', validToken);
+    expect(response.statusCode).toBe(HTTP_BAD_REQUEST);
+  });
+});
+
+describe('GET /api/simulations', () => {
+  it('should get all simulations', async () => {
+    const response = await request(app).get('/api/simulations')
+        .query(
+            {
+              filter: {},
+              range: '[0, 9]',
+              sort: '[id, DESC]'
+            })
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Authentication-Token', validToken);
+    expect(response.statusCode).toBe(HTTP_OK);
+  });
+  it('should require a valid token', async () => {
+    const response = await request(app).get('/api/simulations')
+        .query(
+            {
+              filter: {},
+              range: '[0, 9]',
+              sort: '[id, DESC]'
+            })
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Authentication-Token', invalidToken);
+    expect(response.statusCode).toBe(HTTP_UNAUTHORIZED);
+  });
+  it('should include query parameters', async () => {
+    const response = await request(app).get('/api/simulations')
         .query({})
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')

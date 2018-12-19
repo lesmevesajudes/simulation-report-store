@@ -68,6 +68,18 @@ app.use(function (req, res, next) {
   next(err);
 });
 
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    message: 'Internal error',
+    error: err
+  });
+
+});
+
+
 // development error handler
 // will print stacktrace
 if (!isProduction) {
@@ -81,17 +93,6 @@ if (!isProduction) {
 
   });
 }
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: err
-  });
-
-});
 
 app.run = (host, port, env) => {
   app.set('env', env );

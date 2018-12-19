@@ -26,6 +26,12 @@ const simulationReportValidBody = {
 };
 const simulationValidBody = ()=> ({
   'simulation': {state: 1},
+  'outcome': 'success',
+  'id': fake_uuid(),
+});
+const simulationError = ()=> ({
+  'simulation': {state: 1},
+  'outcome': 'simulation_error',
   'id': fake_uuid(),
 });
 const {simulation_id:is_ignored, ...simulationReportInvalidBody} = simulationReportValidBody;
@@ -100,6 +106,14 @@ describe('GET /api/simulation_reports', () => {
 describe('POST /api/simulations', () => {
   it('should save a simulation', async () => {
     const response = await request(app).post('/api/simulations').send(simulationValidBody())
+        .set('Content-Type', 'application/json')
+        .set('Accept', 'application/json')
+        .set('Authentication-Token', validToken);
+    expect(response.statusCode).toBe(HTTP_OK);
+  });
+
+  it('should save a simulation error', async () => {
+    const response = await request(app).post('/api/simulations').send(simulationError())
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .set('Authentication-Token', validToken);

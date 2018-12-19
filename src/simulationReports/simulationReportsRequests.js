@@ -4,7 +4,7 @@ import database from '../database';
 import Responses from '../shared/responses';
 import {getTokenFromRequest, hasAll} from '../shared/common';
 
-const db = database(config.DATABASE_CONNECTION_STRING+'?sslmode=require');
+const db = database(config.DATABASE_CONNECTION_STRING);
 
 export function getAllSimulationReports(req, res, next) {
   if (isValidToken(getTokenFromRequest(req))) {

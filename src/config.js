@@ -5,5 +5,6 @@ module.exports = {
   DATABASE_CONNECTION_STRING: process.env.DATABASE_URL || 'postgres://localhost:5432/les_meves_ajudes',
   ENVIRONMENT: process.env.NODE_ENV || 'development',
   LISTEN_HOST: process.env.HOST || '0.0.0.0',
-  LISTEN_PORT: process.env.PORT || 3000
+  LISTEN_PORT: process.env.PORT || 3000,
+  USE_SSL_FOR_DATABASE: process.env.USE_SSL_FOR_DATABASE || false,
 };

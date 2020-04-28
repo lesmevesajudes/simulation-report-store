@@ -1,11 +1,12 @@
 import * as config from './config';
 
-const initOptions = {
-    schema: 'ajuts_barcelona_simulations' /* can also be an array of strings or a callback */
-};
+//const initOptions = {
+//    schema: 'ajuts_barcelona_simulations' /* can also be an array of strings or a callback */
+//};
 
 
-const pgPromise = require('pg-promise')(initOptions);
+//const pgPromise = require('pg-promise')(initOptions);
+const pgPromise = require('pg-promise')(/*initialization options*/);
 const cache = new Map();
 
 const database = (databaseURL) => {

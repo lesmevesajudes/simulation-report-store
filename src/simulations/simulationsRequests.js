@@ -48,10 +48,11 @@ export function getAllSimulations(req, res, next) {
 
 export function createSimulation(req, res, next) {
   console.log('createSimulation ' + req.body.simulation + ' ' + req.body.id);
+  const initial_simulation_id = req.body.simulation.initial_simulation_id ? req.body.simulation.initial_simulation_id : null;
   if (!hasAll(req.body, ['simulation', 'id'])) {
     return next(Responses.badRequest());
   }
-  db.none('INSERT INTO simulations (simulation, id) VALUES (${simulation}, ${id})',
+  db.none('INSERT INTO simulations (id_parent, result, simulation, id) VALUES (\'' + initial_simulation_id + '\',${simulation.result},${simulation.data}, ${id})',
       req.body)
       .then(function () {
         res.status(200)
@@ -70,7 +71,7 @@ export function updateSimulation(req, res, next) {
 	  if (!hasAll(req.body, ['simulation', 'id'])) {
 	    return next(Responses.badRequest());
 	  }
-	  db.none('UPDATE simulations SET simulation = ${simulation} WHERE id = ${id}',
+	  db.none('UPDATE simulations SET simulation = ${simulation.data}, result=${simulation.result} WHERE id = ${id}',
 	      req.body)
 	      .then(function () {
 	        res.status(200)

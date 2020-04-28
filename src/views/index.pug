@@ -1,0 +1,13 @@
+html
+	head
+		title= title
+	body
+		p !{id}
+		
+		p Persones
+		ul
+		each person,i in persones
+			li  !{i} : !{person[i]}
+			
+			each personData,i in person
+				p * !{i} !{personData[i]}

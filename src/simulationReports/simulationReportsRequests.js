@@ -7,6 +7,7 @@ import {getTokenFromRequest, hasAll} from '../shared/common';
 const db = database(config.DATABASE_CONNECTION_STRING);
 
 export function getAllSimulationReports(req, res, next) {
+	console.log('getAllSimulationReports');
   if (isValidToken(getTokenFromRequest(req))) {
     const range = req.query.range;
     const regexp = /\[(\d+), *(\d+)\]/g;
@@ -30,7 +31,10 @@ export function getAllSimulationReports(req, res, next) {
 }
 
 export function getSimulationReport(req, res, next) {
+	console.log('getSimulationReport');
+	console.log(req.params.id);
   if (isValidToken(getTokenFromRequest(req))) {
+	console.log(req.params.id);
     db.one('SELECT * FROM simulation_reports WHERE id = $1', req.params.id)
         .then(function (data) {
           res.status(200)

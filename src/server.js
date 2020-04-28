@@ -71,6 +71,7 @@ app.use(function (req, res, next) {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
+  console.error(err);
   res.status(err.status || 500);
   err.status || console.error(err.message);
   res.json({
@@ -93,6 +94,9 @@ if (!isProduction) {
 
   });
 }
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'pug');
 
 app.run = (host, port, env) => {
   app.set('env', env );

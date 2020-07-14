@@ -10,6 +10,7 @@ const pgPromise = require('pg-promise')(/*initialization options*/);
 const cache = new Map();
 
 const database = (databaseURL) => {
+  console.log(databaseURL);
   const dbKey = databaseURL;
   if (cache.has(dbKey)) {
     return cache.get(dbKey);

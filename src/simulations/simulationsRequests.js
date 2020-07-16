@@ -47,37 +47,46 @@ export function getAllSimulations(req, res, next) {
 }
 
 export function createSimulation(req, res, next) {
-  console.log('createSimulation ' + req.body.simulation + ' ' + req.body.id);
-  const initial_simulation_id = req.body.simulation.initial_simulation_id ? req.body.simulation.initial_simulation_id : null;
-  if (!hasAll(req.body, ['simulation', 'id'])) {
-    return next(Responses.badRequest());
-  }
-  db.none('INSERT INTO simulations (id_parent, result, simulation, id) VALUES (\'' + initial_simulation_id + '\',${simulation.result},${simulation.data}, ${id})',
-      req.body)
-      .then(function () {
-        res.status(200)
-            .json({
-              status: 'success',
-              message: 'Inserted one simulation'
-            });
-      })
-      .catch(function (err) {
-        return next(err);
-      });
-}
+	  console.log('createSimulation ' + req.body.simulation + ' ' + req.body.simulation.id);
+	  if (!hasAll(req.body, ['simulation'])) {
+		  return next(Responses.badRequest());
+	  }
+	  if (req.body.simulation.id) {
+		  updateSimulation(req, res, next)
+	  } else {
+		  const shortid = require('shortid');
+		  const id = shortid.generate();
+		  console.log(id);
+		  const initial_simulation_id = req.body.simulation.initial_simulation_id ? req.body.simulation.initial_simulation_id : null;
+		  db.none('INSERT INTO simulations (id, id_parent, result, simulation) VALUES (\'' + id + '\',\'' + initial_simulation_id + '\',${simulation.result},${simulation.data})',
+				  req.body)
+				  .then(function () {
+					  res.status(200)
+					  .json({
+						  status: 'success',
+						  message: 'Inserted one simulation',
+						  id: id
+					  });
+				  })
+				  .catch(function (err) {
+					  return next(err);
+				  });
+	  }
+	}
 
 export function updateSimulation(req, res, next) {
-	  console.log('updateSimulation ' + req.body.simulation + ' ' + req.body.id);
-	  if (!hasAll(req.body, ['simulation', 'id'])) {
+	  console.log('updateSimulation ' + req.body.simulation + ' ' + req.body.simulation.id);
+	  if (!hasAll(req.body, ['simulation'])) {
 	    return next(Responses.badRequest());
 	  }
-	  db.none('UPDATE simulations SET simulation = ${simulation.data}, result=${simulation.result} WHERE id = ${id}',
+	  db.none('UPDATE simulations SET simulation = ${simulation.data}, result=${simulation.result} WHERE id = ${simulation.id}',
 	      req.body)
 	      .then(function () {
-	        res.status(200)
+	        res.status(
+	        		200)
 	            .json({
 	              status: 'success',
-	              message: 'Updated simulation with id ' + req.body.id
+	              message: 'Updated simulation with id ' + req.body.simulation.id
 	            });
 	      })
 	      .catch(function (err) {

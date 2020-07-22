@@ -7,7 +7,7 @@ import Responses from '../shared/responses';
 const db = database(config.DATABASE_CONNECTION_STRING);
 
 export function getSimulation(req, res, next) {
-  console.log('getSimulation' + JSON.stringify(req.body));
+  console.log('getSimulation ' + JSON.stringify(req.params.id));
   if (isValidToken(getTokenFromRequest(req))) {
     db.one('SELECT * FROM simulations WHERE id = $1 and created_at between (now() - interval \'1 year\') and now()', req.params.id)
         .then(function (data) {

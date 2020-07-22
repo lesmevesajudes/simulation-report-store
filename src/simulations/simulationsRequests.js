@@ -58,7 +58,6 @@ export function createSimulation(req, res, next) {
 	  if (!hasAll(req.body, ['simulation'])) {
 		  return next(Responses.badRequest());
 	  }
-	  console.log('(data) -> ' + req.body.simulation.data + '(result) ' +  + JSON.stringify(req.body));
 	  if (req.body.simulation.id) {
 		  updateSimulation(req, res, next)
 	  } else {

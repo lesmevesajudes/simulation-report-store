@@ -35,7 +35,7 @@ const simulationError = ()=> ({
   'id': fake_uuid(),
 });
 const {simulation_id:is_ignored, ...simulationReportInvalidBody} = simulationReportValidBody;
-const {id:also_ignored, ...simulationInvalidBody} = simulationValidBody();
+const {id:also_ignored, simulation:ignored_as_well, ...simulationInvalidBody} = simulationValidBody();
 const validToken = '121331313113';
 const invalidToken = 'invalid-token';
 

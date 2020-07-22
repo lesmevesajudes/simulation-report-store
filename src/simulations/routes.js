@@ -8,6 +8,6 @@ router.get('/:id', getSimulation);
 router.get('/', getAllSimulations);
 router.post('/', createSimulation);
 
-router.get('/all/view', showAllSimulations);
+//router.get('/all/view', showAllSimulations);
 
 export default router;

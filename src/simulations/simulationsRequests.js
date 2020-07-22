@@ -7,14 +7,15 @@ import Responses from '../shared/responses';
 const db = database(config.DATABASE_CONNECTION_STRING);
 
 export function getSimulation(req, res, next) {
-  console.info('getSimulation');
+  console.log('getSimulation' + JSON.stringify(req.body));
   if (isValidToken(getTokenFromRequest(req))) {
-    db.one('SELECT * FROM simulations WHERE id = $1', req.params.id)
+    db.one('SELECT * FROM simulations WHERE id = $1 and created_at between (now() - interval \'1 year\') and now()', req.params.id)
         .then(function (data) {
           res.status(200)
               .json(data);
         })
         .catch(function (err) {
+          console.log('getSimulation error ' + JSON.stringify(req.body));
           return next(err);
         });
   } else {
@@ -38,6 +39,7 @@ export function getAllSimulations(req, res, next) {
                 .json(data);
           })
           .catch(function (err) {
+            console.log('getAllSimulations error');
             return next(err);
           });
     });
@@ -47,16 +49,17 @@ export function getAllSimulations(req, res, next) {
 }
 
 export function createSimulation(req, res, next) {
-	  console.log('createSimulation ' + req.body.simulation + ' ' + req.body.simulation.id);
+	console.log('createSimulation '  + JSON.stringify(req.body));
 	  if (!hasAll(req.body, ['simulation'])) {
 		  return next(Responses.badRequest());
 	  }
+	  console.log('(data) -> ' + req.body.simulation.data + '(result) ' +  + JSON.stringify(req.body));
 	  if (req.body.simulation.id) {
 		  updateSimulation(req, res, next)
 	  } else {
 		  const shortid = require('shortid');
 		  const id = shortid.generate();
-		  console.log(id);
+		  console.log('generated shortid ' + id);
 		  const initial_simulation_id = req.body.simulation.initial_simulation_id ? req.body.simulation.initial_simulation_id : null;
 		  db.none('INSERT INTO simulations (id, id_parent, result, simulation) VALUES (\'' + id + '\',\'' + initial_simulation_id + '\',${simulation.result},${simulation.data})',
 				  req.body)
@@ -69,14 +72,15 @@ export function createSimulation(req, res, next) {
 					  });
 				  })
 				  .catch(function (err) {
+					  console.log('createSimulation error ' + id + ' ' +  + JSON.stringify(req.body));
 					  return next(err);
 				  });
 	  }
 	}
 
 export function updateSimulation(req, res, next) {
-	  console.log('updateSimulation ' + req.body.simulation + ' ' + req.body.simulation.id);
-	  if (!hasAll(req.body, ['simulation'])) {
+	  console.log('updateSimulation ' +  JSON.stringify(req.body));
+	  if (!hasAll(req.body, ['simulation','simulation.id'])) {
 	    return next(Responses.badRequest());
 	  }
 	  db.none('UPDATE simulations SET simulation = ${simulation.data}, result=${simulation.result} WHERE id = ${simulation.id}',
@@ -90,32 +94,33 @@ export function updateSimulation(req, res, next) {
 	            });
 	      })
 	      .catch(function (err) {
+			console.log('updateSimulation error ' + JSON.stringify(req.body));
 	        return next(err);
 	      });
 	}
 
-export function showAllSimulations(req, res, next) {
-	db.one('SELECT * FROM simulations WHERE id = $1', '78c57f1b-a7fa-4faf-8efc-a40791c7bff4')
-    .then(function (data) {
-    	data = JSON.parse(JSON.stringify(data));
-    	var id = data.id;
-    	console.log(id);
-    	var simulation = JSON.parse(data.simulation);
-    	var families = simulation.families;
-    	var persones = simulation.persones;
-    	var unitatsDeConvivencia = simulation.unitats_de_convivencia;
-    	var familiesFinsSegonGrau = simulation.families_fins_a_segon_grau;
-    	console.log(families);
-    	console.log(persones);
-    	console.log(persones[Object.keys(persones)[0]]);
-    	console.log(persones[Object.keys(persones)[0]].anys_empadronat_a_barcelona);
-    	console.log(unitatsDeConvivencia);
-    	console.log(unitatsDeConvivencia[Object.keys(unitatsDeConvivencia)[0]]);
-    	console.log(familiesFinsSegonGrau);
-    	
-    	res.render('index', { title: 'Hey', id, families, persones, unitatsDeConvivencia, unitatsDeConvivencia, familiesFinsSegonGrau});
-    })
-    .catch(function (err) {
-      return next(err);
-    });
-}
+//export function showAllSimulations(req, res, next) {
+//	db.one('SELECT * FROM simulations WHERE id = $1', '78c57f1b-a7fa-4faf-8efc-a40791c7bff4')
+//    .then(function (data) {
+//    	data = JSON.parse(JSON.stringify(data));
+//    	var id = data.id;
+//    	console.log(id);
+//    	var simulation = JSON.parse(data.simulation);
+//    	var families = simulation.families;
+//    	var persones = simulation.persones;
+//    	var unitatsDeConvivencia = simulation.unitats_de_convivencia;
+//    	var familiesFinsSegonGrau = simulation.families_fins_a_segon_grau;
+//    	console.log(families);
+//    	console.log(persones);
+//    	console.log(persones[Object.keys(persones)[0]]);
+//    	console.log(persones[Object.keys(persones)[0]].anys_empadronat_a_barcelona);
+//    	console.log(unitatsDeConvivencia);
+//    	console.log(unitatsDeConvivencia[Object.keys(unitatsDeConvivencia)[0]]);
+//    	console.log(familiesFinsSegonGrau);
+//    	
+//    	res.render('index', { title: 'Hey', id, families, persones, unitatsDeConvivencia, unitatsDeConvivencia, familiesFinsSegonGrau});
+//    })
+//    .catch(function (err) {
+//      return next(err);
+//    });
+//}

@@ -9,10 +9,15 @@ const db = database(config.DATABASE_CONNECTION_STRING);
 export function getSimulation(req, res, next) {
   console.log('getSimulation ' + JSON.stringify(req.params.id));
   if (isValidToken(getTokenFromRequest(req))) {
-    db.one('SELECT * FROM simulations WHERE id = $1 and created_at between (now() - interval \'1 year\') and now()', req.params.id)
+//    db.one('SELECT * FROM simulations WHERE id = $1 and created_at between (now() - interval \'1 year\') and now()', req.params.id)
+    db.one('SELECT * FROM simulations WHERE id = $1', req.params.id)
         .then(function (data) {
-          res.status(200)
-              .json(data);
+          console.log(new Date(data.created_at) + " - " + new Date().setFullYear(new Date().getFullYear() - 1));
+          if (new Date(data.created_at) >  new Date().setFullYear(new Date().getFullYear() - 1)) {
+    		res.status(200).json(data);
+    	  } else {
+    		res.status(210).json(data);
+    	  }
         })
         .catch(function (err) {
           console.log('getSimulation error ' + JSON.stringify(req.body));

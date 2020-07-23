@@ -58,6 +58,9 @@ export function createSimulation(req, res, next) {
 	  if (!hasAll(req.body, ['simulation'])) {
 		  return next(Responses.badRequest());
 	  }
+	  if (!hasAll(req.body.simulation, ['data','result'])) {
+		  return next(Responses.badRequest());
+	  }
 	  if (req.body.simulation.id) {
 		  updateSimulation(req, res, next)
 	  } else {
@@ -84,8 +87,11 @@ export function createSimulation(req, res, next) {
 
 export function updateSimulation(req, res, next) {
 	  console.log('updateSimulation ' +  JSON.stringify(req.body));
-	  if (!hasAll(req.body, ['simulation','simulation.id'])) {
-	    return next(Responses.badRequest());
+	  if (!hasAll(req.body, ['simulation'])) {
+		  return next(Responses.badRequest());
+	  }
+	  if (!hasAll(req.body.simulation, ['id','data','result'])) {
+		  return next(Responses.badRequest());
 	  }
 	  db.none('UPDATE simulations SET simulation = ${simulation.data}, result=${simulation.result} WHERE id = ${simulation.id}',
 	      req.body)

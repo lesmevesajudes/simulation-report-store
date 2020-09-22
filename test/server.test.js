@@ -25,17 +25,17 @@ const simulationReportValidBody = {
   'test_group': 'council'
 };
 const simulationValidBody = ()=> ({
-  'simulation': {state: 1},
+  'simulation': {state: 1, result: '', data: ''},
   'outcome': 'success',
   'id': fake_uuid(),
 });
 const simulationError = ()=> ({
-  'simulation': {state: 1},
+  'simulation': {state: 1, result: 'error', data: ''},
   'outcome': 'simulation_error',
   'id': fake_uuid(),
 });
 const {simulation_id:is_ignored, ...simulationReportInvalidBody} = simulationReportValidBody;
-const {id:also_ignored, ...simulationInvalidBody} = simulationValidBody();
+const {id:also_ignored, simulation:ignored_as_well, ...simulationInvalidBody} = simulationValidBody();
 const validToken = '121331313113';
 const invalidToken = 'invalid-token';
 

@@ -6,3 +6,6 @@ dist
 
 # npm
 node_modules
+/.project
+/.pydevproject
+/package-lock.json

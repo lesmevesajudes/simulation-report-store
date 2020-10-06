@@ -99,6 +99,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 app.run = (host, port, env) => {
+  console.log(port);
   app.set('env', env );
   app.set('host', host);
   app.set('port', port);

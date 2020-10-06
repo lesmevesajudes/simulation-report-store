@@ -28,9 +28,9 @@ export function getSimulation(req, res, next) {
   }
 }
 
-export function getAllSimulations(req, res, next) {
+/*export function getAllSimulations(req, res, next) {
   if (isValidToken(getTokenFromRequest(req))) {
-	console.info('getAllSimulations');
+	  console.info('getAllSimulations');
     const range = req.query.range;
     const regexp = /\[(\d+), *(\d+)\]/g;
     const result = regexp.exec(range);
@@ -51,7 +51,39 @@ export function getAllSimulations(req, res, next) {
   } else {
     return next(Responses.unauthorized());
   }
+}*/
+
+export function getAllSimulations(req, res, next) {
+  if (isValidToken(getTokenFromRequest(req))) {
+    db.any('SELECT * FROM simulations')
+      .then(function (data) {
+        res.status(200)
+            .json(data);
+      })
+      .catch(function (err) {
+        console.log('getAllSimulations error');
+        return next(err);
+    });
+  } else {
+    return next(Responses.unauthorized());
+  }
 }
+
+export function getAllResults(req, res, next) {
+	  if (isValidToken(getTokenFromRequest(req))) {
+	    db.any('SELECT result FROM simulations')
+	      .then(function (data) {
+	        res.status(200)
+	            .json(data);
+	      })
+	      .catch(function (err) {
+	        console.log('getAllResults error');
+	        return next(err);
+	    });
+	  } else {
+	    return next(Responses.unauthorized());
+	  }
+	}
 
 export function createSimulation(req, res, next) {
 	console.log('createSimulation '  + JSON.stringify(req.body));
@@ -127,7 +159,7 @@ export function updateSimulation(req, res, next) {
 //    	console.log(unitatsDeConvivencia);
 //    	console.log(unitatsDeConvivencia[Object.keys(unitatsDeConvivencia)[0]]);
 //    	console.log(familiesFinsSegonGrau);
-//    	
+//
 //    	res.render('index', { title: 'Hey', id, families, persones, unitatsDeConvivencia, unitatsDeConvivencia, familiesFinsSegonGrau});
 //    })
 //    .catch(function (err) {

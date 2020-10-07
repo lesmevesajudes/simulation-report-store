@@ -25,7 +25,7 @@ const simulationReportValidBody = {
   'test_group': 'council'
 };
 const simulationValidBody = ()=> ({
-  'simulation': {state: 1, result: '', data: ''},
+  'simulation': {state: 1, result: 'test result', data: 'test data'},
   'outcome': 'success',
   'id': fake_uuid(),
 });

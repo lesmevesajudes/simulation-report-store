@@ -1,34 +1,46 @@
 import {isValidToken} from '../authentication/authService';
 import config from '../config';
 import database from '../database';
+import Simulation from '../SimulationCollection';
 import {getTokenFromRequest, hasAll} from '../shared/common';
 import Responses from '../shared/responses';
 
 const db = database(config.DATABASE_CONNECTION_STRING);
 
+//Simulation.find(function(error, simulations) {
+//	if (error){
+//		console.log(error);
+//	} else {
+//		console.log('Simulations ' + simulations.length);
+//		console.log(simulations[0].id);
+//		console.log(simulations[0].simulation);
+//		console.log(simulations[0].result);
+//	}
+//});
+
+	
 export function getSimulation(req, res, next) {
   console.log('getSimulation ' + JSON.stringify(req.params.id));
   if (isValidToken(getTokenFromRequest(req))) {
-//    db.one('SELECT * FROM simulations WHERE id = $1 and created_at between (now() - interval \'1 year\') and now()', req.params.id)
-    db.one('SELECT * FROM simulations WHERE id = $1', req.params.id)
-        .then(function (data) {
-          console.log(new Date(data.created_at) + " - " + new Date().setFullYear(new Date().getFullYear() - 1));
-          if (new Date(data.created_at) >  new Date().setFullYear(new Date().getFullYear() - 1)) {
-    		res.status(200).json(data);
-    	  } else {
-    		res.status(210).json(data);
-    	  }
-        })
-        .catch(function (err) {
-          console.log('getSimulation error ' + JSON.stringify(req.body));
-          return next(err);
-        });
+	  Simulation.where({id: req.params.id}).findOne().then(data => {
+//		  console.log(new Date(simulation.created_at) + " - " + new Date().setFullYear(new Date().getFullYear() - 1));
+		  console.log(data);
+		  if (new Date(data.created_at) >  new Date().setFullYear(new Date().getFullYear() - 1)) {
+			  console.log('simulation ok');
+			  res.status(200).json(data);
+		  } else {
+			  res.status(210).json(data);
+		  }
+	  }).catch(function (err) {
+        console.log('getSimulation error ' + JSON.stringify(req.body));
+        return next(err);
+      });;
   } else {
     return next(Responses.unauthorized());
   }
 }
 
-/*export function getAllSimulations(req, res, next) {
+export function getAllSimulations(req, res, next) {
   if (isValidToken(getTokenFromRequest(req))) {
 	  console.info('getAllSimulations');
     const range = req.query.range;
@@ -51,9 +63,9 @@ export function getSimulation(req, res, next) {
   } else {
     return next(Responses.unauthorized());
   }
-}*/
+}
 
-export function getAllSimulations(req, res, next) {
+/*export function getAllSimulations(req, res, next) {
   if (isValidToken(getTokenFromRequest(req))) {
     db.any('SELECT * FROM simulations')
       .then(function (data) {
@@ -67,11 +79,12 @@ export function getAllSimulations(req, res, next) {
   } else {
     return next(Responses.unauthorized());
   }
-}
+}*/
 
 export function getAllResults(req, res, next) {
 	  if (isValidToken(getTokenFromRequest(req))) {
-	    db.any('SELECT result FROM simulations')
+//	    db.any('SELECT result FROM simulations')
+		Simulation.find({result: {$ne:null}, result: {$ne: 'error'} })
 	      .then(function (data) {
 	        res.status(200)
 	            .json(data);
@@ -97,49 +110,56 @@ export function createSimulation(req, res, next) {
 		  updateSimulation(req, res, next)
 	  } else {
 		  const shortid = require('shortid');
-		  const id = shortid.generate();
-		  console.log('generated shortid ' + id);
 		  const initial_simulation_id = req.body.simulation.initial_simulation_id ? req.body.simulation.initial_simulation_id : null;
-		  db.none('INSERT INTO simulations (id, id_parent, result, simulation) VALUES (\'' + id + '\',\'' + initial_simulation_id + '\',${simulation.result},${simulation.data})',
-				  req.body)
-				  .then(function () {
-					  res.status(200)
-					  .json({
-						  status: 'success',
-						  message: 'Inserted one simulation',
-						  id: id
-					  });
-				  })
-				  .catch(function (err) {
-					  console.log('createSimulation error ' + id + ' ' +  + JSON.stringify(req.body));
-					  return next(err);
+		  const simulation = new Simulation({ 
+			  							id: shortid.generate(),
+			  							simulation: req.body.simulation.data,
+			  							result: req.body.simulation.result,
+			  							created_at: new Date(),
+			  							id_parent: initial_simulation_id
+			  					});
+		  simulation.save((error, simulation) => {
+			  if (error) {
+				  console.log('createSimulation error ' + id + ' ' +  + JSON.stringify(req.body));
+				  return next(error);
+			  }
+			  
+			  res.status(200)
+				  .json({
+					  status: 'success',
+					  message: 'Inserted one simulation',
+					  id: simulation.id
 				  });
+		  });
 	  }
 	}
 
 export function updateSimulation(req, res, next) {
-	  console.log('updateSimulation ' +  JSON.stringify(req.body));
-	  if (!hasAll(req.body, ['simulation'])) {
-		  return next(Responses.badRequest());
-	  }
-	  if (!hasAll(req.body.simulation, ['id','data','result'])) {
-		  return next(Responses.badRequest());
-	  }
-	  db.none('UPDATE simulations SET simulation = ${simulation.data}, result=${simulation.result} WHERE id = ${simulation.id}',
-	      req.body)
-	      .then(function () {
-	        res.status(
-	        		200)
-	            .json({
-	              status: 'success',
-	              message: 'Updated simulation with id ' + req.body.simulation.id
-	            });
-	      })
-	      .catch(function (err) {
-			console.log('updateSimulation error ' + JSON.stringify(req.body));
-	        return next(err);
-	      });
+	console.log('updateSimulation ' +  JSON.stringify(req.body));
+	if (!hasAll(req.body, ['simulation'])) {
+	  return next(Responses.badRequest());
 	}
+	if (!hasAll(req.body.simulation, ['id','data','result'])) {
+	  return next(Responses.badRequest());
+	}
+	
+	const simulation = req.body.simulation;
+	console.log(simulation.created_at);
+	console.log(simulation.initial_simulation_id);
+	Simulation.where({ id: simulation.id })
+			.setOptions({ overwrite: true })
+			.replaceOne({ id: simulation.id, result: simulation.result, simulation: simulation.data, created_at: simulation.created_at, id_parent: simulation.initial_simulation_id }, (error, count) => {
+				if (error) {
+					console.log('updateSimulation error ' + JSON.stringify(req.body));
+					return next(error);
+				}
+				res.status(200)
+		            .json({
+		              status: 'success',
+		              message: 'Updated simulation with id ' + req.body.simulation.id
+		            });
+			});
+}
 
 //export function showAllSimulations(req, res, next) {
 //	db.one('SELECT * FROM simulations WHERE id = $1', '78c57f1b-a7fa-4faf-8efc-a40791c7bff4')

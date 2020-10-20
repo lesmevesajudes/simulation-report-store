@@ -17,6 +17,6 @@ const simulationSchema = new mongoose.Schema({
 	id_parent: String,
 });
 
-const Simulation = mongoose.model('Simulation', simulationSchema,'simulation');
+const Simulation = mongoose.model('Simulation', simulationSchema,'simulations');
 
 export default Simulation;

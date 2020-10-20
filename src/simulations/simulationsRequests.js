@@ -1,9 +1,10 @@
 import {isValidToken} from '../authentication/authService';
 import config from '../config';
 import database from '../database';
-import Simulation from '../SimulationCollection';
+import Simulation from '../model/SimulationCollection';
 import {getTokenFromRequest, hasAll} from '../shared/common';
 import Responses from '../shared/responses';
+import {extractResults} from './resultsProcessor.js';
 
 const db = database(config.DATABASE_CONNECTION_STRING);
 
@@ -82,21 +83,27 @@ export function getAllSimulations(req, res, next) {
 }*/
 
 export function getAllResults(req, res, next) {
-	  if (isValidToken(getTokenFromRequest(req))) {
-//	    db.any('SELECT result FROM simulations')
-		Simulation.find({result: {$ne:null}, result: {$ne: 'error'} })
-	      .then(function (data) {
-	        res.status(200)
-	            .json(data);
-	      })
-	      .catch(function (err) {
-	        console.log('getAllResults error');
-	        return next(err);
-	    });
+	console.log('getAllResults');
+		if (isValidToken(getTokenFromRequest(req))) {
+//			const { page = 1, limit = 100 } = req.body;
+			Simulation.find({result: {$ne:null}, result: {$ne: 'error'} },{result: {persones:1, unitats_de_convivencia:1}, _id: 0})
+//				.limit(limit)
+//				.skip((page-1)*limit)
+				.lean(true)
+				.then(function (data) {
+					const results = extractResults(data);
+					res.status(200).json({
+						'results': results,
+//						'page': page
+					});
+				}).catch(function (err) {
+			        console.log('getAllResults error');
+			        return next(err);
+				});
 	  } else {
 	    return next(Responses.unauthorized());
 	  }
-	}
+}
 
 export function createSimulation(req, res, next) {
 	console.log('createSimulation '  + JSON.stringify(req.body));
@@ -186,3 +193,5 @@ export function updateSimulation(req, res, next) {
 //      return next(err);
 //    });
 //}
+
+

@@ -3,7 +3,7 @@ import {Router} from 'express';
 
 const router = Router();
 
-router.get('/results', getAllResults);
+router.post('/results', getAllResults);
 router.get('/:id', getSimulation);
 router.get('/', getAllSimulations);
 router.post('/', createSimulation);

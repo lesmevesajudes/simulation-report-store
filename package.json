@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "yarn build && node dist/index.js",
+    "start": "yarn build && node --inspect dist/index.js",
     "start:dev": "nodemon --exec babel-node $npm_package_main",
     "clean": "rimraf dist",
     "build": "yarn clean && mkdir -p dist && node_modules/.bin/babel src -s -D -d dist",
@@ -22,6 +22,7 @@
     "morgan": "^1.9.0",
     "pg-promise": "~8.4.5",
     "pug": "^2.0.4",
+    "ramda": "^0.27.0",
     "rimraf": "^2.6.2",
     "shortid":"2.2.15"
   },

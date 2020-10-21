@@ -10,26 +10,12 @@ import {generateResumes} from '../tools/generate_simulation_resums.js'
 //const db = database(config.DATABASE_CONNECTION_STRING);
 const db = connect('mongodb://jamgo:jamgo@localhost:27017/les-meves-ajudes');
 
-//generateResumes();
 
 
-//Simulation.find(function(error, simulations) {
-//	if (error){
-//		console.log(error);
-//	} else {
-//		console.log('Simulations ' + simulations.length);
-//		console.log(simulations[0].id);
-//		console.log(simulations[0].simulation);
-//		console.log(simulations[0].result);
-//	}
-//});
-
-	
 export function getSimulation(req, res, next) {
   console.log('getSimulation ' + JSON.stringify(req.params.id));
   if (isValidToken(getTokenFromRequest(req))) {
 	  Simulation.where({id: req.params.id}).findOne().then(data => {
-//		  console.log(new Date(simulation.created_at) + " - " + new Date().setFullYear(new Date().getFullYear() - 1));
 		  console.log(data);
 		  if (new Date(data.created_at) >  new Date().setFullYear(new Date().getFullYear() - 1)) {
 			  console.log('simulation ok');
@@ -47,67 +33,31 @@ export function getSimulation(req, res, next) {
 }
 
 export function getAllSimulations(req, res, next) {
-  if (isValidToken(getTokenFromRequest(req))) {
-	  console.info('getAllSimulations');
-    const range = req.query.range;
-    const regexp = /\[(\d+), *(\d+)\]/g;
-    const result = regexp.exec(range);
-    if (result === null) return next(Responses.badRequest());
-    const [, from, to] = result;
-    db.one('SELECT COUNT(*) FROM simulations').then(function (countResult) {
-      db.any('SELECT * FROM simulations ORDER BY id LIMIT $1 OFFSET $2', [to - from, from])
-          .then(function (data) {
-            res.set('Content-Range', 'simulations ' + from + '-' + to + '/' + countResult.count);
-            res.status(200)
-                .json(data);
-          })
-          .catch(function (err) {
-            console.log('getAllSimulations error');
-            return next(err);
-          });
-    });
-  } else {
-    return next(Responses.unauthorized());
-  }
-}
-
-/*export function getAllSimulations(req, res, next) {
-  if (isValidToken(getTokenFromRequest(req))) {
-    db.any('SELECT * FROM simulations')
-      .then(function (data) {
-        res.status(200)
-            .json(data);
-      })
-      .catch(function (err) {
-        console.log('getAllSimulations error');
-        return next(err);
-    });
-  } else {
-    return next(Responses.unauthorized());
-  }
-}*/
-
-export function getAllResults(req, res, next) {
-	console.log('getAllResults');
-		if (isValidToken(getTokenFromRequest(req))) {
-//			const { page = 1, limit = 100 } = req.body;
-			Simulation.find({result: {$ne:null}, result: {$ne: 'error'} },{result: {persones:1, unitats_de_convivencia:1}, _id: 0})
-//				.limit(limit)
-//				.skip((page-1)*limit)
-				.lean(true)
-				.then(function (data) {
-					const results = extractResults(data);
-					res.status(200).json({
-						'results': results,
-//						'page': page
-					});
-				}).catch(function (err) {
-			        console.log('getAllResults error');
-			        return next(err);
-				});
-	  } else {
+	console.log('getAllSimulations');
+	if (!isValidToken(getTokenFromRequest(req))) {
 	    return next(Responses.unauthorized());
-	  }
+	}
+	if (!hasAll(req.query, ['page','limit'])) {
+	  return next(Responses.badRequest());
+	}
+	// TODO include sort parameter in query
+	var { page = 1, limit = 100 } = req.query;
+	limit = parseInt(limit);
+	page = parseInt(page);
+	Simulation.find()
+		.limit(limit)
+		.skip((page-1)*limit)
+		.lean(true)
+		.then(function (data) {
+			const results = extractResults(data);
+			res.status(200).json({
+				'results': results,
+				'page': page
+			});
+		}).catch(function (err) {
+	        console.log('getAllSimulations error');
+	        return next(err);
+		});
 }
 
 export function createSimulation(req, res, next) {

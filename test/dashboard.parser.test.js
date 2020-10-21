@@ -1,5 +1,5 @@
 import {parse} from '../src/dashboard/parser';
-import {simulation} from './simulation.js';
+import {simulation} from './data/simulation.js';
 
 const ajudesKeys = [
 	'AE_230_01_mensual',

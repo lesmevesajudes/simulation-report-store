@@ -1,9 +1,8 @@
-import {getSimulation, getAllSimulations, createSimulation, updateSimulation, showAllSimulations, getAllResults} from './simulationsRequests';
+import {getSimulation, getAllSimulations, createSimulation} from './simulationsRequests';
 import {Router} from 'express';
 
 const router = Router();
 
-router.post('/results', getAllResults);
 router.get('/:id', getSimulation);
 router.get('/', getAllSimulations);
 router.post('/', createSimulation);

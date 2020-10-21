@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import authenticationRoutes from './authentication/routes';
 import simulationReportsRoutes from './simulationReports/routes';
 import simulationsRoutes from './simulations/routes';
+import dashboardRoutes from './dashboard/routes';
 
 const app = express();
 const isProduction  = app.get('env') === 'production';
@@ -50,6 +51,7 @@ app.use ('/', rootRouter);
 app.use('/api/simulation_reports', simulationReportsRoutes);
 app.use('/api/simulations', simulationsRoutes);
 app.use('/api/authenticate', authenticationRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 
 //////////////////

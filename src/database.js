@@ -1,4 +1,6 @@
 import * as config from './config';
+const mongoose = require('mongoose');
+
 
 //const initOptions = {
 //    schema: 'ajuts_barcelona_simulations' /* can also be an array of strings or a callback */
@@ -21,3 +23,22 @@ const database = (databaseURL) => {
 };
 
 export default database;
+
+
+export const connect = (databaseURL) => {
+	const dbKey = databaseURL;
+	if (cache.has(dbKey)) {
+		return cache.get(dbKey);
+	}
+	const instance = mongoose.connect(databaseURL, {useNewUrlParser: true}, error => {
+		if (!error) {
+			console.log('Connected');
+		} else {
+			console.log('Error connecting to db')
+			console.log(error);
+		}
+	});
+	cache.set(dbKey, instance);
+}
+
+//export default dbDisconnect = () => mongoose.connection.close();

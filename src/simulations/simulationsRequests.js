@@ -1,12 +1,17 @@
 import {isValidToken} from '../authentication/authService';
 import config from '../config';
-import database from '../database';
+import {database,connect} from '../database';
 import Simulation from '../model/SimulationCollection';
 import {getTokenFromRequest, hasAll} from '../shared/common';
 import Responses from '../shared/responses';
 import {extractResults} from './resultsProcessor.js';
+import {generateResumes} from '../tools/generate_simulation_resums.js'
 
-const db = database(config.DATABASE_CONNECTION_STRING);
+//const db = database(config.DATABASE_CONNECTION_STRING);
+const db = connect('mongodb://jamgo:jamgo@localhost:27017/les-meves-ajudes');
+
+//generateResumes();
+
 
 //Simulation.find(function(error, simulations) {
 //	if (error){

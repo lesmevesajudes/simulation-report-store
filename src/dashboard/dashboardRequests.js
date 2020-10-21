@@ -9,7 +9,7 @@ import {generateResumes} from '../tools/generate_simulation_resums.js'
 //const db = database(config.DATABASE_CONNECTION_STRING);
 connect('mongodb://jamgo:jamgo@localhost:27017/les-meves-ajudes');
 
-//generateResumes();
+generateResumes();
 
 export function getAll(req, res, next) {
 	console.log('get all dashboard');

@@ -8,6 +8,7 @@ import {
     pickBy,
     pipe,
     pluck,
+    prop,
     values} from 'ramda';
 
 export const parse = (data,ajudes) => {
@@ -27,7 +28,7 @@ export const parse = (data,ajudes) => {
 
 const getDateMark = result => {
 	// { result: { persones: {'804d0876-ec94-42ab-953a-62a435a8a062': { AE_230_01_mensual: {'2017-01': 0 }}}, unitats_de_convivencia: {}}}--> '2017-01'
-	const date = pipe(values,head,values,head,keys,head)(result.persones)
+	const date = pipe(values,head,prop('edat'),keys,head)(result.persones)
 	return date
 }
 
@@ -44,7 +45,7 @@ const getResumPersona = (persona, dateMark, ajudesCodes) => {
 							pickAll(ajudesCodes))(persona);
 	resumPersona.ajudes = ajudes;
 	resumPersona.sexe = persona.sexe;
-	resumPersona.edat = persona.edat;
+	resumPersona.edat = parseInt(persona.edat);
 	resumPersona.discapacitat = persona.grau_discapacitat ? true : false;
 	resumPersona.violencia = persona.victima_violencia_de_genere || persona.victima_violencia_domestica ? true : false;
 	resumPersona.escolaritzacio = persona.es_escolaritzat_entre_P3_i_4rt_ESO ? true : false;

@@ -1,5 +1,6 @@
-import {parse} from '../src/dashboard/parser';
+import {parse, getEstatus} from '../src/dashboard/parser';
 import {simulation} from './data/simulation.js';
+import {dashboard_with_ajudes_persona_and_habitatge, dashboard_with_ajudes_persona, dashboard_with_ajudes_habitatge, dashboard_without_ajudes} from './data/dashboard.js';
 
 const ajudesKeys = [
 	'AE_230_01_mensual',
@@ -21,7 +22,7 @@ const ajudesKeys = [
 	'HA_004_01',
 	'HA_005']
 
-describe('parse', () => {
+describe('parse dashboard', () => {
 	it('should return a dashboard resume', async () => {
 		const dashboardData = parse(simulation, ajudesKeys);
 		console.log(dashboardData)
@@ -29,6 +30,7 @@ describe('parse', () => {
 		expect((1900 + dashboardData.data.getYear()) + "-" + (dashboardData.data.getMonth() + 1)).toBe('2020-10');
 		
 		expect(dashboardData.persones.length).toBe(2);
+		expect(dashboardData.estatus).toBe(1);
 		
 		const persona1 = dashboardData.persones[0];
 		expect(persona1.ajudes.length).toBe(2);
@@ -55,7 +57,16 @@ describe('parse', () => {
 	});
 });
 
-
-
+describe('get dashboard estatus', () => {
+	it('should be positive', async () => {
+		expect(getEstatus(dashboard_with_ajudes_persona_and_habitatge)).toBe(true);
+		expect(getEstatus(dashboard_with_ajudes_persona)).toBe(true); 
+		expect(getEstatus(dashboard_with_ajudes_habitatge)).toBe(true); 
+	})
+	
+	it('should be negative', async () => {
+		expect(getEstatus(dashboard_without_ajudes)).toBe(false);
+	})
+})
 
 

@@ -5,7 +5,7 @@ const dashboardSchema = new mongoose.Schema({
 	data: Date,
 	persones: Object,
 	habitatge: Object,
-	estatus: Number
+	estatus: Boolean,
 });
 
 const Dashboard = mongoose.model('Dashboard', dashboardSchema,'dashboard');

@@ -1,0 +1,5 @@
+docker exec -ti les-meves-ajudes-mongo bash
+
+## -d <db> -c <collection>
+mongoimport -u jamgo -p jamgo -d les-meves-ajudes -c simulations --file /docker-entrypoint-initdb.d/simulations --jsonArray
+

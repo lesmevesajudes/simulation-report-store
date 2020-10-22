@@ -1,14 +1,19 @@
 import Dashboard from '../model/DashboardCollection';
 import {
 	compose,
+	filter,
 	head,
+	isEmpty,
     keys,
     map,
+    not,
+    path,
     pickAll,
     pickBy,
     pipe,
     pluck,
     prop,
+    or,
     values} from 'ramda';
 
 export const parse = (data,ajudes) => {
@@ -36,7 +41,7 @@ const getResumPersones = (persones, dateMark, ajudesCodes) => {
 	return compose(map(p => getResumPersona(p,dateMark, ajudesCodes)),
 					values)(persones)
 }
-
+	
 const getResumPersona = (persona, dateMark, ajudesCodes) => {
 	const resumPersona = {};
 	persona = pluck(dateMark, persona)
@@ -70,6 +75,16 @@ const getResumHabitatge = (data, dateMark, ajudesCodes) => {
 	return resumHabitatge;
 }
 
-const getEstatus = dashboard => {
-	
+export const getEstatus = dashboard => {
+	const areAjudesPersones = compose(not,
+									isEmpty,
+									filter(pipe(isEmpty,not)),
+									map(prop('ajudes')),
+									prop('persones'))(dashboard)
+
+	const areAjudesHabitatge = compose(not,
+									isEmpty,
+									filter(pipe(isEmpty,not)), // r => !isEmpty(r))
+									path(['habitatge','ajudes']))(dashboard)
+	return or(areAjudesPersones,areAjudesHabitatge)
 }

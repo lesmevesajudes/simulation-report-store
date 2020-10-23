@@ -2,14 +2,14 @@ import {isValidToken} from '../authentication/authService';
 import config from '../config';
 import {connect} from '../database';
 import Dashboard from '../model/DashboardCollection';
-import {getTokenFromRequest, hasAll} from '../shared/common';
+import {getTokenFromRequest} from '../shared/common';
 import Responses from '../shared/responses';
 import {generateResumes} from '../tools/generate_simulation_resums.js'
 
 //const db = database(config.DATABASE_CONNECTION_STRING);
 connect('mongodb://jamgo:jamgo@localhost:27017/les-meves-ajudes');
 
-generateResumes();
+//generateResumes();
 
 export function getAll(req, res, next) {
 	console.log('get all dashboard');

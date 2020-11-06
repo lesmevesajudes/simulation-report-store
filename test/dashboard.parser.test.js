@@ -26,15 +26,17 @@ describe('parse dashboard', () => {
 	it('should return a dashboard resume', async () => {
 		const dashboardData = parse(simulation, ajudesKeys);
 		console.log(dashboardData)
-		expect(dashboardData.id_simulacio).toBe('DR4pbzwtB');
+		expect(dashboardData.id_simulacio).toBe('XR4pbzwtB');
+		expect(dashboardData.id_parent).toBe('ZR4pbzwtB');
 		expect((1900 + dashboardData.data.getYear()) + "-" + (dashboardData.data.getMonth() + 1)).toBe('2020-10');
 		
 		expect(dashboardData.persones.length).toBe(2);
-		expect(dashboardData.estatus).toBe(1);
+		expect(dashboardData.estatus).toBe(true);
+		expect(dashboardData.id_parent).toBe('ZR4pbzwtB');
 		
 		const persona1 = dashboardData.persones[0];
 		expect(persona1.ajudes.length).toBe(2);
-		expect(persona1.ajudes[0]).toBe('GA_246_01');
+		expect(persona1.ajudes[0]).toBe('GA_246_01');test
 		expect(persona1.ajudes[1]).toBe('GE_051_02_mensual');
 		expect(persona1.sexe).toBe('dona');
 		expect(persona1.edat).toBe(87);

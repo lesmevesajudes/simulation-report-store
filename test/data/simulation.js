@@ -1,5 +1,7 @@
 export const simulation = {
     id: 'DR4pbzwtB',
+    id_simulacio: 'XR4pbzwtB',
+    id_parent: 'ZR4pbzwtB',
     result: {
         families: {
             'fc0fdad3-ae8e-486d-84ae-1235df8a7ed0': {

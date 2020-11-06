@@ -17,12 +17,12 @@ const ajudesKeys = [
 	'GE_051_02_mensual',
 	'GE_051_03_mensual',
 	'GG_270_mensual',
-	'HA_001',
-	'HA_002',
-	'HA_003',
-	'HA_004',
-	'HA_004_01',
-	'HA_005']
+	'HA_077_01',
+	'HG_077_02',
+	'HG_077_03',
+	'HG_077_04',
+	'HG_077_04_01',
+	'HE_077_00']
 
 const fs = require('fs');
 

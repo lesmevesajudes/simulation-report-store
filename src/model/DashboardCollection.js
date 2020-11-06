@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const dashboardSchema = new mongoose.Schema({
 	id_simulacio: String,
+	id_parent: String,
 	data: Date,
 	persones: Object,
 	habitatge: Object,

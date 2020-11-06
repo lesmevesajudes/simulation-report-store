@@ -21,7 +21,8 @@ export const parse = (data,ajudes) => {
 		return null;
 	}
 	const dashboard = new Dashboard({ 
-		id_simulacio: data.id
+		id_simulacio: data.id_simulacio,
+		id_parent: data.id_parent
 	});
 	const dateMark = getDateMark(data.result);
 	dashboard.data = dateMark;

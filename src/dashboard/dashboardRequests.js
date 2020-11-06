@@ -15,7 +15,8 @@ export function getAll(req, res, next) {
 	console.log('get all dashboard');
 		if (isValidToken(getTokenFromRequest(req))) {
 //			Dashboard.find({result: {$ne:null}, result: {$ne: 'error'} },{result: {persones:1, unitats_de_convivencia:1}, _id: 0})
-			Dashboard.find({id_simulacio : {$ne: null}})
+//			Dashboard.find({id_simulacio : {$ne: null}})
+			Dashboard.find()
 				.lean(true)
 				.then(function (data) {
 					res.status(200).json({
@@ -25,6 +26,22 @@ export function getAll(req, res, next) {
 			        console.log('get all dashboard error');
 			        return next(err);
 				});
+	  } else {
+	    return next(Responses.unauthorized());
+	  }
+}
+
+export function countEditedSimulations(req, res, next) {
+	console.log('get all edited simulations dashboard');
+		if (isValidToken(getTokenFromRequest(req))) {
+			Dashboard.count({ id_parent: {$ne: null}}).then(function (data) {
+				res.status(200).json({
+					'count': data,
+				});
+			}).catch(function (err) {
+		        console.log('count edited simulations error');
+		        return next(err);
+			});
 	  } else {
 	    return next(Responses.unauthorized());
 	  }

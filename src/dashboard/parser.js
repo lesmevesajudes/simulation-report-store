@@ -21,9 +21,11 @@ export const parse = (data,ajudes) => {
 		return null;
 	}
 	const dashboard = new Dashboard({ 
-		id_simulacio: data.id_simulacio,
-		id_parent: data.id_parent
+		id_simulacio: data.id_simulacio
 	});
+	if (data.id_parent != null) {
+		dashboard.id_parent = data.id_parent;
+	}
 	const dateMark = getDateMark(data.result);
 	dashboard.data = dateMark;
 	dashboard.persones = getResumPersones(data.result.persones, dateMark, ajudes);

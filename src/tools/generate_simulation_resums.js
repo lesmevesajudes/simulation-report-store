@@ -40,12 +40,12 @@ const saveDashboard = data => {
 
 export const generateResumes = () => {
 	Simulation.find({result: {$ne:null}, result: {$ne: 'error'}, simulation: {$ne:null}})
-	.lean(true)
-	.then(function (data) {
-		compose(map(s => saveDashboard(s)),
-				map(s => parse(s, ajudesKeys)))(data)
-	}).catch(function (err) {
-        console.log('getSimulations error');
-        console.log(err);
-	});
+				.lean(true)
+				.then(function (data) {
+					compose(map(s => saveDashboard(s)),
+							map(s => parse(s, ajudesKeys)))(data)
+				}).catch(function (err) {
+			        console.log('getSimulations error');
+			        console.log(err);
+				});
 }

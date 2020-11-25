@@ -60,12 +60,13 @@ describe('GET /api/simulation_reports', () => {
         .set('Authentication-Token', invalidToken);
     expect(response.statusCode).toBe(HTTP_UNAUTHORIZED);
   });
-  it('should include query parameters', async () => {
-    const response = await request(app).get('/api/simulation_reports')
-        .query({})
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .set('Authentication-Token', validToken);
-    expect(response.statusCode).toBe(HTTP_BAD_REQUEST);
-  });
+  // TODO parameters have been removed from method logic; uncomment test when they are included again.
+//  it('should include query parameters', async () => {
+//    const response = await request(app).get('/api/simulation_reports')
+//        .query({})
+//        .set('Content-Type', 'application/json')
+//        .set('Accept', 'application/json')
+//        .set('Authentication-Token', validToken);
+//    expect(response.statusCode).toBe(HTTP_BAD_REQUEST);
+//  });
 });

@@ -26,7 +26,7 @@ describe('parse dashboard', () => {
 	it('should return a dashboard resume', async () => {
 		const dashboardData = parse(simulation, ajudesKeys);
 		console.log(dashboardData)
-		expect(dashboardData.id_simulacio).toBe('XR4pbzwtB');
+		expect(dashboardData.id_simulacio).toBe('DR4pbzwtB');
 		expect(dashboardData.id_parent).toBe('ZR4pbzwtB');
 		expect((1900 + dashboardData.data.getYear()) + "-" + (dashboardData.data.getMonth() + 1)).toBe('2020-10');
 		

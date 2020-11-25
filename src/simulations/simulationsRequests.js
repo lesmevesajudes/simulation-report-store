@@ -5,11 +5,12 @@ import Simulation from '../model/SimulationCollection';
 import {getTokenFromRequest, hasAll} from '../shared/common';
 import Responses from '../shared/responses';
 import {extractResults} from './resultsProcessor.js';
-import {generateResumes} from '../tools/generate_simulation_resums.js'
+import {parse, ajudesKeys} from '../dashboard/parser';
+import {saveDashboard} from '../dashboard/dashboardRequests.js';
+
 
 //const db = database(config.DATABASE_CONNECTION_STRING);
 const db = connect('mongodb://jamgo:jamgo@localhost:27017/les-meves-ajudes');
-
 
 
 export function getSimulation(req, res, next) {
@@ -78,14 +79,17 @@ export function createSimulation(req, res, next) {
 			  							simulation: req.body.simulation.data,
 			  							result: req.body.simulation.result,
 			  							created_at: new Date(),
-			  							id_parent: initial_simulation_id
-			  					});
+			  							id_parent: initial_simulation_id});
 		  simulation.save((error, simulation) => {
 			  if (error) {
 				  console.log('createSimulation error ' + id + ' ' +  + JSON.stringify(req.body));
 				  return next(error);
 			  }
 			  
+			  // create dashboard entry for this simulation
+			  const dashboard = parse(simulation, ajudesKeys);
+			  saveDashboard(dashboard);
+						
 			  res.status(200)
 				  .json({
 					  status: 'success',
@@ -110,7 +114,7 @@ export function updateSimulation(req, res, next) {
 	console.log(simulation.initial_simulation_id);
 	Simulation.where({ id: simulation.id })
 			.setOptions({ overwrite: true })
-			.replaceOne({ id: simulation.id, result: simulation.result, simulation: simulation.data, created_at: simulation.created_at, id_parent: simulation.initial_simulation_id }, (error, count) => {
+			.replaceOne({ id: simulation.id, result: simulation.result, simulation: simulation.data, created_at: new Date(), id_parent: simulation.initial_simulation_id }, (error, count) => {
 				if (error) {
 					console.log('updateSimulation error ' + JSON.stringify(req.body));
 					return next(error);

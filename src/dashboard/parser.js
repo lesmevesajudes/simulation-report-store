@@ -16,12 +16,34 @@ import {
     or,
     values} from 'ramda';
 
+export const ajudesKeys = [
+				'AE_230_01_mensual',
+				'AE_230_mensual',
+				'EG_233_mensual',
+				'GA_234_01',
+				'GA_234_02',
+				'GA_246_01',
+				'GA_246_02',
+				'GE_051_00_mensual',
+				'GE_051_01_mensual',
+				'GE_051_02_mensual',
+				'GE_051_03_mensual',
+				'GG_270_mensual',
+				'HA_077_01',
+				'HG_077_02',
+				'HG_077_03',
+				'HG_077_04',
+				'HG_077_04_01',
+				'HE_077_00']
+
+    
 export const parse = (data,ajudes) => {
 	if (data.result.persones == null) {
 		return null;
 	}
 	const dashboard = new Dashboard({ 
-		id_simulacio: data.id_simulacio
+		//id_simulacio: data.id_simulacio
+		id_simulacio: data.id
 	});
 	if (data.id_parent != null) {
 		dashboard.id_parent = data.id_parent;
@@ -57,6 +79,7 @@ const getResumPersona = (persona, dateMark, ajudesCodes) => {
 	resumPersona.discapacitat = persona.grau_discapacitat ? true : false;
 	resumPersona.violencia = persona.victima_violencia_de_genere || persona.victima_violencia_domestica ? true : false;
 	resumPersona.escolaritzacio = persona.es_escolaritzat_entre_P3_i_4rt_ESO ? true : false;
+	// TODO parse incomes
 //	resumPersona.ingressos
 	resumPersona.situacio_laboral = persona.situacio_laboral;
 	return resumPersona;

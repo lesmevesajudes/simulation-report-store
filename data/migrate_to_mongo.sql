@@ -9,3 +9,6 @@ select '{"id":"'||s.id||'","result":'||to_json(s."result"::json)||',"simulation"
 -- Exportar el resultado de las queries a csv, y después de quitar la cabecera 'column' del documento llevarlo al volumen mapeado del contenedor de mongo para ejecutar la importación:
 
   mongoimport --uri "mongodb://jamgo:jamgo@localhost:27017/les-meves-ajudes" --collection simulations /docker-entrypoint-initdb.d
+  
+-- usar la rama migrate-to-mongo
+-- script aids.json importarlo a a la base de datos para poder mostrar las ayudas en el dashboard

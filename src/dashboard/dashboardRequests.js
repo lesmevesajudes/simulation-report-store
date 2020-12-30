@@ -18,7 +18,8 @@ export function getAll(req, res, next) {
 	if (isValidToken(getTokenFromRequest(req))) {
 //		Dashboard.find({result: {$ne:null}, result: {$ne: 'error'} },{result: {persones:1, unitats_de_convivencia:1}, _id: 0})
 //		Dashboard.find({id_simulacio : {$ne: null}})
-		Dashboard.find({ data: { $gte: req.query.from_date, $lte: req.query.until_date }})
+//		Dashboard.find({ data: { $gte: req.query.from_date, $lte: req.query.until_date }})
+		Dashboard.find()
 			.lean(true)
 			.then(function (data) {
 				res.status(200).json({

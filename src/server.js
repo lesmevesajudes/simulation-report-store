@@ -17,7 +17,7 @@ app.use(logger(isProduction ? 'combined' : 'dev'));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
 // API Queries
 //////////////////
 const rootRouter = Router();
-rootRouter.get('/', function (req, res, next) {
+rootRouter.get('/', function (req, res) {
   res.status(200)
       .json({
         status: 'success',
@@ -70,7 +70,7 @@ app.use(function (req, res, next) {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
   console.error(err);
   res.status(err.status || 500);
   err.status || console.error(err.message);
@@ -84,7 +84,7 @@ app.use(function (err, req, res, next) {
 // development error handler
 // will print stacktrace
 if (!isProduction) {
-  app.use(function (err, req, res, next) {
+  app.use(function (err, req, res) {
     err.status || console.error(err);
     res.status(err.status || 500);
     res.json({
@@ -99,6 +99,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
 app.run = (host, port, env) => {
+  console.log(port);
   app.set('env', env );
   app.set('host', host);
   app.set('port', port);

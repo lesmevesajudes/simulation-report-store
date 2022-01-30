@@ -17,6 +17,12 @@ const database = (databaseURL) => {
   }
   const instance = pgPromise(databaseURL+'?ssl='+config.USE_SSL_FOR_DATABASE);
   cache.set(dbKey, instance);
+  console.log("Counting simulations");
+  instance.one("select count(*) from simulations").then(
+    (count) => console.log('Num rows in simulations: ', count)  
+  ).catch(
+    (error) => console.log('Error counting simulations: ', error)
+  );
   return instance;
 };
 

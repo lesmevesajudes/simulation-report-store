@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   AUTH_TOKEN: process.env.AUTH_TOKEN || '121331313113',
   AUTH_USER: process.env.AUTH_USER || 'admin',
   AUTH_PASSWORD: process.env.AUTH_PASSWORD || '1111',
@@ -9,4 +9,6 @@ module.exports = {
   USE_SSL_FOR_DATABASE: process.env.USE_SSL_FOR_DATABASE || false,
 };
 
-console.log('config.js');
+console.log('application configuration: ', config);
+
+export default config;

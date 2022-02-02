@@ -11,4 +11,4 @@ const config = {
 
 console.log('application configuration: ', config);
 
-export default config;
+module.exports = config;

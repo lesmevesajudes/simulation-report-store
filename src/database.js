@@ -7,9 +7,14 @@ const database = (databaseURL) => {
   if (cache.has(databaseURL)) {
     return cache.get(databaseURL);
   }
-  const connectionString = `${databaseURL}?ssl=${USE_SSL_FOR_DATABASE}`;
-  console.log('Database connection string: ', connectionString);
-  const instance = pgPromise(connectionString);
+  const dbConfig = {
+    connectionString: databaseURL,
+    ssl: USE_SSL_FOR_DATABASE ? {
+      rejectUnauthorized: false,
+    } : false,
+  };
+  console.log('Database connection config: ', dbConfig);
+  const instance = pgPromise(dbConfig);
   cache.set(databaseURL, instance);
   console.log("Counting simulations");
   instance.one("select count(*) from simulations").then(

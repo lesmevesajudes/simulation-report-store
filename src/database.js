@@ -1,6 +1,11 @@
 import { USE_SSL_FOR_DATABASE } from './config';
 
-const pgPromise = require('pg-promise')(/*initialization options*/);
+const pgPromise = require('pg-promise')({
+  connect(client, dc, useCount) {
+    const cp = client.connectionParameters;
+    console.log('Connected to database:', cp.database);
+  }
+});
 const cache = new Map();
 
 const database = (databaseURL) => {
@@ -14,6 +19,7 @@ const database = (databaseURL) => {
     } : false,
   };
   console.log('Database connection config: ', dbConfig);
+  
   const instance = pgPromise(dbConfig);
   cache.set(databaseURL, instance);
   console.log("Counting simulations");

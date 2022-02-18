@@ -1,5 +1,5 @@
 import config from '../config.js';
-import {authenticate}  from './authService';
+import {authenticate, isValidDashboardAccessCode}  from './authService';
 import Responses from '../shared/responses';
 
 export function login(req, res, next) {
@@ -13,4 +13,10 @@ export function login(req, res, next) {
   }
 }
 
-
+export function validateDashboardAccess(req, res, next) {
+  if (isValidDashboardAccessCode(req.body.code)) {
+    return res.status(200).send();
+  } else {
+    return next(Responses.unauthorized());
+  }
+}

@@ -7,6 +7,7 @@ const config = {
   LISTEN_HOST: process.env.HOST || '0.0.0.0',
   LISTEN_PORT: process.env.PORT || 3001,
   USE_SSL_FOR_DATABASE: process.env.USE_SSL_FOR_DATABASE || false,
+  DASHBOARD_SECRET: process.env.DASHBOARD_SECRET || '4c3ss',
 };
 
 console.log('application configuration: ', config);

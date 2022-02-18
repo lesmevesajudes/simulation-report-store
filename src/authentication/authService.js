@@ -7,3 +7,7 @@ export function authenticate (username, password) {
 export function isValidToken(clientToken) {
   return clientToken === config.AUTH_TOKEN;
 }
+
+export function isValidDashboardAccessCode (code) {
+  return code === config.DASHBOARD_SECRET;
+}

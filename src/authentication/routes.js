@@ -1,5 +1,8 @@
-import {login} from './authenticationRequests';
+import {login, validateDashboardAccess} from './authenticationRequests';
 import {Router} from 'express';
 
 const router = Router();
-export default router.post('/', login);
+router.post('/', login);
+router.post('/dashboard-code', validateDashboardAccess);
+
+export default router;
